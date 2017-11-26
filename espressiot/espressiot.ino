@@ -10,16 +10,17 @@
 
 // WIFI
 
-#define WIFI_SSID "HomeNetwork"
-#define WIFI_PASS "MyPassword"
+#define WIFI_SSID "welcomeHome"
+#define WIFI_PASS "lkbyysq123!"
 
 // options for special modules
 #define ENABLE_JSON
 #define ENABLE_HTTP
-#define ENABLE_MQTT
+// #define ENABLE_MQTT
+#define ENABLE_DISPLAY
 
 // use simulation or real heater and sensors
-//#define SIMULATION_MODE
+#define SIMULATION_MODE
 
 //
 // STANDARD reset values based on Gaggia CC
@@ -118,6 +119,11 @@ void setup()
   setupMQTT();
   #endif
 
+  #ifdef ENABLE_DISPLAY
+  setupDisplay();
+  #endif
+  
+
   // setup components
   setupHeater();
   setupSensor();
@@ -180,6 +186,11 @@ void loop() {
     #endif
     
     serialStatus();
+
+    #ifdef ENABLE_DISPLAY
+    displayStatus();
+    #endif
+    
     time_last=time_now;
   }
 
