@@ -4,19 +4,18 @@
 #include "images.h"
 
 #include <Wire.h> 
-#include "SSD1306.h"
+#include "SH1106.h"
 #include "OLEDDisplayUi.h"
 
 #define DISPLAY_SDA_PIN D3
-#define DISPLAY_SCK_PIN D5
+#define DISPLAY_SCK_PIN D4
 
-SSD1306  display(0x3c, DISPLAY_SDA_PIN, DISPLAY_SCK_PIN);
+SH1106 display(0x3c, DISPLAY_SDA_PIN, DISPLAY_SCK_PIN);
 OLEDDisplayUi ui     ( &display );
 
 void setupDisplay() {
   display.init();
   display.flipScreenVertically();
-  // display.setContrast(255);
 }
 
 void drawTempWidget(int x, int y, double inputTemp, double targetTemp ) {
@@ -36,7 +35,6 @@ void drawTempWidget(int x, int y, double inputTemp, double targetTemp ) {
   display.drawString(x, y+7, intemp2);
   display.drawString(x, y+24, ttemp);
 }
-
 
 void displayStatus() {
   display.clear();
