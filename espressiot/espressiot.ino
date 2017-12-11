@@ -18,6 +18,7 @@
 #define ENABLE_HTTP
 // #define ENABLE_MQTT
 #define ENABLE_DISPLAY
+// #define ENABLE_TCP_STATUS
 
 // use simulation or real heater and sensors
 #define SIMULATION_MODE
@@ -69,6 +70,10 @@ void setup()
 
   Serial.begin(115200);
 
+  #ifdef ENABLE_DISPLAY
+  setupDisplay();
+  #endif
+
   Serial.println("Mounting SPIFFS...");
   if(!prepareFS()) {
     Serial.println("Failed to mount SPIFFS !");
@@ -105,7 +110,7 @@ void setup()
     delay(500);
     Serial.print(".");
   }
-  
+
   Serial.println("");
   Serial.println("WiFi connected.");
   Serial.print("IP address: ");
@@ -119,10 +124,10 @@ void setup()
   setupMQTT();
   #endif
 
-  #ifdef ENABLE_DISPLAY
-  setupDisplay();
+  #ifdef ENABLE_TCP_STATUS
+  setupTCPStatus();
   #endif
-  
+
 
   // setup components
   setupHeater();
@@ -139,22 +144,9 @@ void setup()
     
 }
 
-void serialStatus() {
-  Serial.print(gInputTemp, 2); Serial.print(" ");
-  Serial.print(gTargetTemp, 2); Serial.print(" ");
-  Serial.print(gOutputPwr, 2); Serial.print(" ");
-  Serial.print(gP, 2); Serial.print(" ");
-  Serial.print(gI, 2); Serial.print(" ");
-  Serial.print(gD, 2); Serial.print(" ");
-  Serial.print(ESPPID.GetKp(), 2); Serial.print(" ");
-  Serial.print(ESPPID.GetKi(), 2); Serial.print(" ");
-  Serial.print(ESPPID.GetKd(), 2);
-  Serial.println("");
-}
-
 void loop() {
   time_now=millis();
-
+  
   updateTempSensor(); 
   gInputTemp=getTemp();
 
@@ -190,7 +182,11 @@ void loop() {
     #ifdef ENABLE_DISPLAY
     displayStatus();
     #endif
-    
+
+    #ifdef ENABLE_TCP_STATUS
+    TCPStatus();
+    #endif
+
     time_last=time_now;
   }
 
@@ -199,6 +195,9 @@ void loop() {
   #ifdef ENABLE_HTTP
   loopWebSrv();
   #endif 
-  
+
+  #ifdef ENABLE_TCP_STATUS
+  loopTCPStatus();
+  #endif
 }
 
