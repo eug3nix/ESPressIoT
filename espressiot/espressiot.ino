@@ -23,6 +23,10 @@
 // use simulation or real heater and sensors
 #define SIMULATION_MODE
 
+// uncommend one of the lines below to select a proper temperature sensor
+// #define TEMP_SENSOR_DS18B20
+// #define TEMP_SENSOR_TSIC
+
 //
 // STANDARD reset values based on Gaggia CC
 //

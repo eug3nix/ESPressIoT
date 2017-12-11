@@ -12,12 +12,12 @@
 #include <DallasTemperature.h>
 
 // pins for power and signal
-#define DS_SIG D1 // D0 is used as 1wire signal pin
+#define DS_SIG D1 // D1 is used as 1wire signal pin
 
 #define DS18B20_RESOLUTION 10
 #define DS_WAIT_MS 750/(12 - DS18B20_RESOLUTION)
 
-OneWire oneWire(D1);
+OneWire oneWire(DS_SIG);
 DallasTemperature DS18B20(&oneWire);
 unsigned long lastSensTime;
 
@@ -34,8 +34,9 @@ void updateTempSensor() {
   }
 }
 
+ // getTemp takes about 30ms to complete, can it be optimized somehow ?
 float getTemp() {
-  DS18B20.getTempCByIndex(0);
+  return DS18B20.getTempCByIndex(0);
 }
 
 #endif
