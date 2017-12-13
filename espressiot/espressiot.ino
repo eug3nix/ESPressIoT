@@ -74,6 +74,8 @@ void setup()
 
   Serial.begin(115200);
 
+  setupButtons();
+
   #ifdef ENABLE_DISPLAY
   setupDisplay();
   #endif
@@ -203,5 +205,7 @@ void loop() {
   #ifdef ENABLE_TCP_STATUS
   loopTCPStatus();
   #endif
+
+  loopButtons();
 }
 
