@@ -8,7 +8,6 @@
 // timeouts for steam->coffee_idle auto fallback and auto-poweroff
 #define STEAMING_TIMEOUT 1000 * 300
 #define POWEROFF_TIMEOUT 1000 * 1800
-#define BREW_SECONDS 32
 
 // coffe idle state handlers
 void coffeeIdleEnter() {
@@ -30,9 +29,10 @@ void coffeeBrewingEnter() {
 
 void coffeeBrewingRun() {
   unsigned long timeInBrewing = millis() - brewStartTime;
-  int secondsLeft = BREW_SECONDS - timeInBrewing/1000;
+  int secondsLeft = gBrewSeconds - timeInBrewing/1000;
   if (secondsLeft == 0) {
     fsm.trigger(EVENT_TIMEOUT_BREW);
+    return;
   }
   displayCoffeeBrewingScreen(secondsLeft);
 }

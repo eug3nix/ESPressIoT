@@ -38,6 +38,7 @@
 #define S_TSET 94.0
 #define S_STEAM_TSET 125.0
 #define S_TBAND 1.5
+#define S_BREW_SECONDS 32
 
 //
 // Intervals for I/O
@@ -55,6 +56,8 @@ double gInputTemp=20.0;
 double gOutputPwr=0.0;
 double gP = S_P, gI = S_I, gD = S_D;
 double gaP = S_aP, gaI = S_aI, gaD = S_aD;
+
+int gBrewSeconds = S_BREW_SECONDS;
 
 unsigned long time_now=0;
 unsigned long time_last=0;

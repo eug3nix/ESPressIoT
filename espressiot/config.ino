@@ -52,6 +52,7 @@ bool loadConfig() {
   //wifi_ssid = json["ssid"];
   //wifi_pass = json["password"];
   gTargetTemp = json["tset"];
+  gBrewSeconds = json["brew_seconds"];
   gOvershoot = json["tband"];
   gP = json["P"], gI = json["I"], gD = json["D"];
   gaP = json["aP"], gaI = json["aI"], gaD = json["aD"];
@@ -64,6 +65,7 @@ bool saveConfig() {
   JsonObject& json = jsonBuffer.createObject();
   //json["ssid"] = wifi_ssid;  json["password"] = wifi_pass;
   json["tset"] = gTargetTemp;  json["tband"] = gOvershoot;
+  json["brew_seconds"] = gBrewSeconds;
   json["P"] = gP, json["I"] = gI, json["D"] = gD;
   json["aP"] = gaP, json["aI"] = gaI, json["aD"] = gaD;
 
@@ -81,6 +83,7 @@ void resetConfig() {
  gP=S_P; gI=S_I; gD=S_D;
  gaP=S_aP; gaI=S_aI; gaD=S_aD;
  gTargetTemp=S_TSET;
+ gBrewSeconds=S_BREW_SECONDS;
  gOvershoot=S_TBAND;
 }
 

@@ -53,7 +53,9 @@ void handleConfig() {
   }
   message += "<form action=\"set_config\">\nTarget Temperature:<br>\n";
   message += "<input type=\"text\" name=\"tset\" value=\"" + String(gTargetTemp) +"\"><br/><br/>\n";
-  message += "<form action=\"set_config\">\nThreshold for adaptive PID:<br>\n";
+  message += "Brew time(seconds):<br>\n";
+  message += "<input type=\"text\" name=\"brew_seconds\" value=\"" + String(gBrewSeconds) +"\"><br/><br/>\n";
+  message += "Threshold for adaptive PID:<br>\n";
   message += "<input type=\"text\" name=\"tband\" value=\"" + String(gOvershoot) +"\"><br/><br/>\n";
   message += "normal PID:<br>\n P <input type=\"text\" name=\"pgain\" value=\"" + String(gP) + "\"><br/>\n";
   message += "I <input type=\"text\" name=\"igain\" value=\"" + String(gI) + "\"><br/>\n";
@@ -101,6 +103,10 @@ void handleSetConfig() {
     if(server.argName(i)=="tset") {
           message += "new tset: " + server.arg ( i ) + "<br/>\n";
           gTargetTemp = ( (server.arg(i)).toFloat() );
+    }
+    else if(server.argName(i)=="brew_seconds") {
+          message += "new brew_seconds: " + server.arg ( i ) + "<br/>\n";
+          gBrewSeconds = ( (server.arg(i)).toInt() );
     }
     else if(server.argName(i)=="tband") {
           message += "new tset: " + server.arg ( i ) + "<br/>\n";
