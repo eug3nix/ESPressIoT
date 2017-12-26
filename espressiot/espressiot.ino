@@ -8,7 +8,6 @@
 #include <PID_v1.h>
 #include <ESP8266WiFi.h>
 
-#include "wifi_settings.h"
 #include "display.h"
 #include "state_machine.h"
 
@@ -66,6 +65,9 @@ boolean tuning = false;
 boolean osmode = false;
 boolean poweroffMode = true;
 
+String gWifiSSID = "";
+String gWifiPassword = "";
+
 //
 // gloabl classes
 //
@@ -108,20 +110,7 @@ void setup()
    
   Serial.println("Settin up PID...");
 
-  WiFi.begin(WIFI_SSID, WIFI_PASS);
-  Serial.println("");
-  Serial.print("MAC address: ");
-  Serial.println(WiFi.macAddress());
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-
-  Serial.println("");
-  Serial.println("WiFi connected.");
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
+  setupWifi();
 
   #ifdef ENABLE_HTTP
   setupWebSrv();

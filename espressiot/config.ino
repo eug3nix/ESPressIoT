@@ -49,21 +49,21 @@ bool loadConfig() {
     return false;
   }
 
-  //wifi_ssid = json["ssid"];
-  //wifi_pass = json["password"];
+  gWifiSSID = json["ssid"].as<String>();
+  gWifiPassword = json["password"].as<String>();
   gTargetTemp = json["tset"];
   gBrewSeconds = json["brew_seconds"];
   gOvershoot = json["tband"];
   gP = json["P"], gI = json["I"], gD = json["D"];
   gaP = json["aP"], gaI = json["aI"], gaD = json["aD"];
-
+  json.prettyPrintTo(Serial);
   return true;
 }
 
 bool saveConfig() {
   StaticJsonBuffer<BUF_SIZE> jsonBuffer;
   JsonObject& json = jsonBuffer.createObject();
-  //json["ssid"] = wifi_ssid;  json["password"] = wifi_pass;
+  json["ssid"] = gWifiSSID;  json["password"] = gWifiPassword;
   json["tset"] = gTargetTemp;  json["tband"] = gOvershoot;
   json["brew_seconds"] = gBrewSeconds;
   json["P"] = gP, json["I"] = gI, json["D"] = gD;
@@ -75,6 +75,7 @@ bool saveConfig() {
     return false;
   }
 
+  json.prettyPrintTo(Serial);
   json.printTo(configFile);
   return true;
 }
@@ -85,6 +86,8 @@ void resetConfig() {
  gTargetTemp=S_TSET;
  gBrewSeconds=S_BREW_SECONDS;
  gOvershoot=S_TBAND;
+ gWifiSSID = "";
+ gWifiPassword = "";
 }
 
 #endif

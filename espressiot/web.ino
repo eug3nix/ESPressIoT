@@ -63,6 +63,11 @@ void handleConfig() {
   message += "adaptive PID:<br>\n P <input type=\"text\" name=\"apgain\" value=\"" + String(gaP) + "\"><br/>\n";
   message += "I <input type=\"text\" name=\"aigain\" value=\"" + String(gaI) + "\"><br/>\n";
   message += "D <input type=\"text\" name=\"adgain\" value=\"" + String(gaD) + "\"><br><br>\n";
+  message += "Wifi AP Name:<br>\n";
+  message += "<input type=\"text\" name=\"wifi_ssid\" value=\"" + String(gWifiSSID) + "\"><br><br>\n";
+  message += "Wifi Password:<br>\n";
+  message += "<input type=\"text\" name=\"wifi_password\" value=\"" + String(gWifiPassword) + "\"><br><br>\n";
+  message += "<input type=\"submit\" value=\"Submit\">\n</form><br/>";
   message += "<input type=\"submit\" value=\"Submit\">\n</form>";
   message += "<hr/>";
   message += "<a href=\"./loadconf\"><button>Load Config</button></a><br/>\n";
@@ -136,7 +141,14 @@ void handleSetConfig() {
           message += "new pgain: " + server.arg ( i ) + "<br/>\n";
           gaD = ( (server.arg(i)).toFloat() );
     }
-    
+    else if(server.argName(i)=="wifi_ssid") {
+          message += "new wifi_ssid: " + server.arg ( i ) + "<br/>\n";
+          gWifiSSID = server.arg(i);
+    }
+    else if(server.argName(i)=="wifi_password") {
+          message += "new wifi_password: " + server.arg ( i ) + "<br/>\n";
+          gWifiPassword = server.arg(i);
+    }
   }
   server.send(200, "text/html", message);
   
