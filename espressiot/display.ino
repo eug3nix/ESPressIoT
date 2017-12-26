@@ -1,18 +1,5 @@
 #ifdef ENABLE_DISPLAY
 
-#include "fonts.h"
-#include "images.h"
-
-#include <Wire.h> 
-#include "SH1106.h"
-#include "OLEDDisplayUi.h"
-
-#define DISPLAY_SDA_PIN D3
-#define DISPLAY_SCK_PIN D4
-
-SH1106 display(0x3c, DISPLAY_SDA_PIN, DISPLAY_SCK_PIN);
-OLEDDisplayUi ui     ( &display );
-
 void setupDisplay() {
   display.init();
   display.flipScreenVertically();
@@ -36,11 +23,38 @@ void drawTempWidget(int x, int y, double inputTemp, double targetTemp ) {
   display.drawString(x, y+24, ttemp);
 }
 
-void displayStatus() {
+void displayCoffeeIdleScreen() {
   display.clear();
-  char degstr[12];
   display.drawXbm(0, 16, cup_width, cup_height, cup_bits);
   drawTempWidget(128, 16, gInputTemp, gTargetTemp);
+  display.display();
+}
+
+void displayCoffeeBrewingScreen(int seconds) {
+  display.clear();
+  display.drawXbm(0, 16, cup_width, cup_height, cup_bits);
+  display.setTextAlignment(TEXT_ALIGN_CENTER);
+  display.setFont(Nimbus_Sans_L_Regular_Condensed_16);
+  display.setColor(BLACK);
+  display.drawString(24, 34, String(seconds));
+  display.setColor(WHITE);
+  drawTempWidget(128, 16, gInputTemp, gTargetTemp);
+  display.display();
+}
+
+
+void displaySteamingScreen() {
+  display.clear();
+  display.drawXbm(0, 16, steam_width, steam_height, steam_bits);
+  drawTempWidget(128, 16, gInputTemp, gTargetTemp);
+  display.display();
+}
+
+void displayScreensaver() {
+  display.clear();
+  display.setTextAlignment(TEXT_ALIGN_LEFT);
+  display.setFont(Nimbus_Sans_L_Regular_Condensed_32);
+  display.drawString(40, 10, "Zzz...");
   display.display();
 }
 

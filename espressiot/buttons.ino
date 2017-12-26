@@ -1,54 +1,63 @@
 //
 // ESPressIoT Controller for Espresso Machines
-// 2016 by Eugene Dubnin
+// 2017 by Eugene Dubnin
 //
 // Button handling routines
 //
 
 #include "OneButton.h"
 
-#define PWR_BUTTON_PIN D8
-#define MODE_BUTTON_PIN D7
-#define TOGGLE_BUTTON_PIN D6
+#define PWR_BUTTON_PIN D5
+#define MODE_BUTTON_PIN D2
+#define TOGGLE_BUTTON_PIN D0
 
 // setup buttons: pin, is it active low?
 
 // D8 pin has a pulldown on NodeMCU thus the inverted button state
 OneButton btnPower(PWR_BUTTON_PIN, false);
-OneButton btnMode(MODE_BUTTON_PIN, true);
-OneButton btnToggle(TOGGLE_BUTTON_PIN, true);
+OneButton btnMode(MODE_BUTTON_PIN, false);
+OneButton btnToggle(TOGGLE_BUTTON_PIN, false);
 
 void setupButtons() {
   btnPower.attachClick(btnPowerClick);
   btnPower.attachLongPressStart(btnPowerLongPressStart);
 
+  btnMode.setClickTicks(300);
   btnMode.attachClick(btnModeClick);
   btnMode.attachLongPressStart(btnModeLongPressStart);
 
+  btnMode.setClickTicks(300);
   btnToggle.attachClick(btnToggleClick);
 }
 
 
 void btnPowerClick() {
-  Serial.println("Power click");
+  fsm.trigger(EVENT_BTN_PWR_CLICK);
 }
 
 void btnPowerLongPressStart() {
-  Serial.println("Power longpress");
+  fsm.trigger(EVENT_BTN_PWR_LONGPRESS);
 }
 
 void btnModeClick() {
-  Serial.println("Mode click");
+  if(!poweroffMode) {
+    click();
+  }
+
+  fsm.trigger(EVENT_BTN_MODE_CLICK);
 }
 
 void btnModeLongPressStart() {
-  Serial.println("Mode longpress");
+  fsm.trigger(EVENT_BTN_MODE_LONGPRESS);
 }
 
 void btnToggleClick() {
-  Serial.println("Toggle click");
-}
+  if(!poweroffMode) {
+    click();
+  }
 
+  fsm.trigger(EVENT_BTN_TOGGLE_CLICK);
+}
 
 void loopButtons() {
   btnPower.tick();

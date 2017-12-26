@@ -8,16 +8,15 @@
 #include <PID_v1.h>
 #include <ESP8266WiFi.h>
 
-// WIFI
+#include "wifi_settings.h"
+#include "display.h"
+#include "state_machine.h"
 
-#define WIFI_SSID "welcomeHome"
-#define WIFI_PASS "lkbyysq123!"
 
 // options for special modules
 #define ENABLE_JSON
 #define ENABLE_HTTP
 // #define ENABLE_MQTT
-#define ENABLE_DISPLAY
 // #define ENABLE_TCP_STATUS
 
 // use simulation or real heater and sensors
@@ -37,6 +36,7 @@
 #define S_aI 0.0
 #define S_aD 0.0
 #define S_TSET 94.0
+#define S_STEAM_TSET 125.0
 #define S_TBAND 1.5
 
 //
@@ -61,7 +61,7 @@ unsigned long time_last=0;
 
 boolean tuning = false;
 boolean osmode = false;
-boolean poweroffMode = false;
+boolean poweroffMode = true;
 
 //
 // gloabl classes
@@ -71,14 +71,12 @@ PID ESPPID(&gInputTemp, &gOutputPwr, &gTargetTemp, gP, gI, gD, DIRECT);
 void setup()
 {
   gOutputPwr=0;
-
   Serial.begin(115200);
 
+  setupFSM();
   setupButtons();
-
-  #ifdef ENABLE_DISPLAY
+  setupRelays();
   setupDisplay();
-  #endif
 
   Serial.println("Mounting SPIFFS...");
   if(!prepareFS()) {
@@ -147,7 +145,7 @@ void setup()
  
   time_now=millis();
   time_last=time_now;
-    
+
 }
 
 void loop() {
@@ -185,10 +183,6 @@ void loop() {
     
     serialStatus();
 
-    #ifdef ENABLE_DISPLAY
-    displayStatus();
-    #endif
-
     #ifdef ENABLE_TCP_STATUS
     TCPStatus();
     #endif
@@ -207,5 +201,6 @@ void loop() {
   #endif
 
   loopButtons();
+  loopFSM();
 }
 
